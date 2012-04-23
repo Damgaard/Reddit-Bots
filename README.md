@@ -3,8 +3,8 @@ Reddit Bots
 
 This repository contains some of my bots that uses the Python wrapper of the Reddit API.
 
-Last Edited 23 April 2012
-* - Andreas Damgaard Pedersen *
+Last Edited 23 April 2012  
+_- Andreas Damgaard Pedersen_
 
 Karma Origins
 -------------
