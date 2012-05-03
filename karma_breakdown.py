@@ -16,23 +16,20 @@ Created by Andreas Damgaard Pedersen 22 April 2012
 Reddit username: _Daimon_
 """
 
+import argparse
 import operator
 import sys
 import urllib2
 
 import reddit
 
-RETRIEVE_LIMIT = 100
-
 def sort_and_cut(dic, limit):
-    """Takes a dictionary and a limit as an input. Returns a sorted list 
-       containing the highest 'limit' elements"""
+    """Returns a sorted list containing the highest 'limit' elements"""
     return sorted(dic.iteritems(), key=operator.itemgetter(1), 
                   reverse=True)[:limit]
 
 def term_print(karma_by_subreddit):
-    """Takes the 'karma_by_subreddit' dictionary as outputted by main, 
-        and print the information in a nicely readable format on the terminal"""
+    """Print dict from main in nice readable format"""
     width= 25
     align = (">","<")
     titel = ("Subreddit", "Karma")
@@ -46,10 +43,15 @@ def term_print(karma_by_subreddit):
     print
 
 def main(user, thing_type="submissions"):
-   """Take a user and a thing_type (either 'submissions' or 'comments') 
-      as input. Return a directory where the keys are display names of 
-      subreddits, like proper or python, and the values are how much 
-      karma the user has gained in that subreddit."""
+   """
+   Create a dictionary with karma breakdown by subreddit.
+      
+   Takes a user and a thing_type (either 'submissions' or 'comments') 
+   as input. Return a directory where the keys are display names of 
+   subreddits, like proper or python, and the values are how much 
+   karma the user has gained in that subreddit.
+   """
+   RETRIEVE_LIMIT = 100
    karma_by_subreddit = {}
    thing_limit = RETRIEVE_LIMIT
    user = r.get_redditor(user)
@@ -62,19 +64,33 @@ def main(user, thing_type="submissions"):
    return karma_by_subreddit
 
 if __name__ == "__main__":
+    CUT_LIMIT = 5
+    DEFAULT_REDDITORS = ['_Daimon_']
     user_agent = "Karma breakdown 1.1 by /u/_Daimon_"
-    limit = 10
     r = reddit.Reddit(user_agent=user_agent)
-    if len(sys.argv) == 1:
-        comment_karma = main("_Daimon_", thing_type="comments")
-        comment_karma = sort_and_cut(comment_karma, limit)
-        print "Comment karma for _Daimon_"
-        term_print(comment_karma)
-    for user in sys.argv[1:]:
+    parser = argparse.ArgumentParser(description=
+            """Break down a users karma by subreddit""")
+    parser.add_argument('redditors', metavar='N', type=str, nargs='*',
+                default=DEFAULT_REDDITORS, help='Redditors to analyse')
+    parser.add_argument('-c', '--comments', dest='show_comments', 
+                action='store_false', help='Disable karma break for comments')
+    parser.add_argument('-s', '--submissions', dest='show_submissions', 
+                action='store_false', help='Disable karma break for submissions')
+    args = parser.parse_args()
+    break_by = ['comments', 'submissions']
+    if not args.show_comments:
+        break_by.remove('comments')
+    if not args.show_submissions:
+        break_by.remove('submissions')
+    if not len(break_by):
+        print >> sys.stderr, ("ERROR. Both comments and submission breaking " + 
+                              "disabled!")
+        sys.exit(-1)
+    for user in args.redditors:
         try:
-            for thing_type in ("comments", "submissions"):
+            for thing_type in break_by:
                 karma = main(user, thing_type=thing_type)
-                karma = sort_and_cut(karma, limit)
+                karma = sort_and_cut(karma, CUT_LIMIT)
                 print "{0} karma for {1}".format(thing_type, user)
                 term_print(karma)
         except urllib2.HTTPError:
