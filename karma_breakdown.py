@@ -10,7 +10,7 @@ breakdowns of comments and submissions by subreddit.
 
 This program is part of the beginners tutorial on the python wrapper module
 of Reddits API, which can be found here
-https://github.com/mellort/reddit_api/wiki/Getting-Started
+https://github.com/praw-dev/praw/wiki/Getting-Started
 
 Created by Andreas Damgaard Pedersen 22 April 2012
 Reddit username: _Daimon_
@@ -21,7 +21,7 @@ import operator
 import sys
 import urllib2
 
-import reddit
+import praw
 
 def sort_and_cut(dic, limit):
     """Returns a sorted list containing the highest 'limit' elements"""
@@ -30,7 +30,7 @@ def sort_and_cut(dic, limit):
 
 def term_print(karma_by_subreddit):
     """Print dict from main in nice readable format"""
-    width= 25
+    width = 25
     align = (">","<")
     titel = ("Subreddit", "Karma")
     print "{titel[0]:{align[0]}{width}} | {titel[1]:{align[1]}{width}}" \
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     CUT_LIMIT = 5
     DEFAULT_REDDITORS = ['_Daimon_']
     user_agent = "Karma breakdown 1.1 by /u/_Daimon_"
-    r = reddit.Reddit(user_agent=user_agent)
+    r = praw.Reddit(user_agent=user_agent)
     parser = argparse.ArgumentParser(description=
             """Break down a users karma by subreddit""")
     parser.add_argument('redditors', metavar='N', type=str, nargs='*',
