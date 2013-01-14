@@ -2,3 +2,5 @@
 *.un
 *.pyc
 authentication.py
+SubscriberDB.txt
+*.txt
