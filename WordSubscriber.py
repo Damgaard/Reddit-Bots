@@ -9,11 +9,14 @@ Use cronjobs / task manager to keep the program running.
 TODO: Make callable with commandline arguments to improve versatility.
 """
 
+import os
+
 import praw
 
 from authentication import USERNAME, PASSWORD
 
-DB_FILE = 'SubscriberDB.txt'
+HERE = os.path.abspath(os.path.dirname(__file__))
+DB_FILE = os.path.join(HERE, 'SubscriberDB.txt')
 
 def load_last_found_id():
     try:
