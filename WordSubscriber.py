@@ -51,11 +51,11 @@ def is_valid_result(result, bad_words):
     return good_title and good_subreddit
 
 def message_me(result, search_word):
-    r.send_message(r.user, 'New post about %s' % search_word, '[%s](%s)'
-                                               % (result.title, result.url))
-    print "Sent %s" % result.title
+    title = 'New post about %s' % search_word
+    body =  '[%s](%s)' % (result.title, result.url)
+    r.send_message('_Daimon_', title, body)
 
-r = praw.Reddit('WordSubscriber by u/_Daimon_ ver 0.1. Source see '
+r = praw.Reddit('WordSubscriber by u/_Daimon_ ver 0.1.1. Source see '
                 'github.com/Damgaard/Reddit-Bots')
 r.login(USERNAME, PASSWORD)
 last_found_id = load_last_found_id()
