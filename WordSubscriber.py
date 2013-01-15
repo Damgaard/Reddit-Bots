@@ -44,9 +44,9 @@ def load_last_found_ids():
     except IOError:
         return [None] * IDS_KEPT
 
-def store_last_found_ids(new_id):
+def store_last_found_ids(new_ids):
     with open(DB_FILE, 'w') as db:
-        for id in new_id:
+        for id in new_ids:
             db.write("%s\n" % id)
 
 def search_results(reddit_session, search_word, stop_ids):
@@ -63,7 +63,8 @@ def search_results(reddit_session, search_word, stop_ids):
         yield result
 
 def get_newest_ids(reddit_session, search_word):
-    result_generator = reddit_session.search(search_word, limit=IDS_KEPT)
+    result_generator = reddit_session.search(search_word, sort='new',
+                                             limit=IDS_KEPT)
     newest_ids = list(result.id for result in result_generator)
     return newest_ids + [None] * (IDS_KEPT - len(newest_ids))
 
