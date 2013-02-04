@@ -77,7 +77,7 @@ def is_valid_result(result, bad_words):
 
 def message_me(reddit_session, result, search_word):
     title = 'New post about %s' % search_word
-    body =  '[%s](%s)' % (result.title, result.url)
+    body =  '[%s](%s)' % (result.title, result.permalink)
     reddit_session.send_message('_Daimon_', title, body)
 
 if __name__ == '__main__':
