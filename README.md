@@ -15,3 +15,14 @@ Nerd Baller
 -----------
 
 Creates an overview of post made by notables in the Starcraft 2 Scene.
+
+Word Subscriber
+---------------
+
+Sends a user a message whenever a one of a series of words are used. Also
+supports filtering out results from certain subreddits or with certain words
+in their title. This is very useful if the words you search for are commonly
+used in another context. For instance, I'm interested in knowing when the
+`praw python module <https://github.com/praw-dev/praw>`_ is mentioned, but I
+don't care about the artist `john praw <http://johnpraw.bandcamp.com/album/
+john-praw>`_.
