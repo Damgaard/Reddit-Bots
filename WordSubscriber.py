@@ -22,6 +22,7 @@ DB_FILE = os.path.join(HERE, 'SubscriberDB.txt')
 # subreddit, then we will message for every returned result.
 IDS_KEPT = 3
 
+
 def main():
     r = praw.Reddit('WordSubscriber by u/_Daimon_ ver 0.1.1. Source see '
                     'github.com/Damgaard/Reddit-Bots')
@@ -35,6 +36,7 @@ def main():
             message_me(r, result, search_word)
     store_last_found_ids(newest_ids)
 
+
 def load_last_found_ids():
     try:
         with open(DB_FILE, 'r') as db:
@@ -44,10 +46,12 @@ def load_last_found_ids():
     except IOError:
         return [None] * IDS_KEPT
 
+
 def store_last_found_ids(new_ids):
     with open(DB_FILE, 'w') as db:
         for id in new_ids:
             db.write("%s\n" % id)
+
 
 def search_results(reddit_session, search_word, stop_ids):
     """
@@ -62,22 +66,25 @@ def search_results(reddit_session, search_word, stop_ids):
             break
         yield result
 
+
 def get_newest_ids(reddit_session, search_word):
     result_generator = reddit_session.search(search_word, sort='new',
                                              limit=IDS_KEPT)
     newest_ids = list(result.id for result in result_generator)
     return newest_ids + [None] * (IDS_KEPT - len(newest_ids))
 
+
 def is_valid_result(result, bad_words):
     """Does the title or subreddit contain a bad word?"""
     good_title = all(word not in result.title.lower() for word in bad_words)
     good_subreddit = all(word not in result.subreddit.display_name.lower()
-                                  for word in bad_words)
+                         for word in bad_words)
     return good_title and good_subreddit
+
 
 def message_me(reddit_session, result, search_word):
     title = 'New post about %s' % search_word
-    body =  '[%s](%s)' % (result.title, result.permalink)
+    body = '[%s](%s)' % (result.title, result.permalink)
     reddit_session.send_message('_Daimon_', title, body)
 
 if __name__ == '__main__':
