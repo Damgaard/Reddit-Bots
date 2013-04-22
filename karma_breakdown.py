@@ -45,7 +45,7 @@ def term_print(karma_by_subreddit):
     print
 
 
-def main(user, thing_type="submissions"):
+def main(user, limit, thing_type="submissions"):
     """
     Create a dictionary with karma breakdown by subreddit.
 
@@ -54,12 +54,10 @@ def main(user, thing_type="submissions"):
     subreddits, like proper or python, and the values are how much
     karma the user has gained in that subreddit.
     """
-    RETRIEVE_LIMIT = 100
     karma_by_subreddit = {}
-    thing_limit = RETRIEVE_LIMIT
     user = r.get_redditor(user)
-    gen = (user.get_comments(limit=thing_limit) if thing_type == "comments" else
-           user.get_submitted(limit=thing_limit))
+    gen = (user.get_comments(limit=limit) if thing_type == "comments" else
+           user.get_submitted(limit=limit))
     for thing in gen:
         subreddit = thing.subreddit.display_name
         karma_by_subreddit[subreddit] = (karma_by_subreddit.get(subreddit, 0)
@@ -68,20 +66,23 @@ def main(user, thing_type="submissions"):
 
 
 if __name__ == "__main__":
-    CUT_LIMIT = 5
-    DEFAULT_REDDITORS = ['_Daimon_']
     user_agent = "Karma breakdown 1.1 by /u/_Daimon_"
     r = praw.Reddit(user_agent=user_agent)
     parser = argparse.ArgumentParser(
-        description="""Break down a users karma by subreddit""")
+        description="Break down a users karma by subreddit")
     parser.add_argument('redditors', metavar='N', type=str, nargs='*',
-                        default=DEFAULT_REDDITORS, help='Redditors to analyse')
+                        default=['_Daimon_'], help='Redditors to analyse')
     parser.add_argument('-c', '--comments', dest='show_comments',
                         action='store_false',
                         help='Disable karma break for comments')
     parser.add_argument('-s', '--submissions', dest='show_submissions',
                         action='store_false',
                         help='Disable karma break for submissions')
+    parser.add_argument('--limit', dest='limit', type=int, default=100,
+                        help='How many entries are examined')
+    parser.add_argument('--highest', dest='highest', type=int, default=5,
+                        help='This number of subreddits with highest karma'
+                             'gained are shown')
     args = parser.parse_args()
     break_by = ['comments', 'submissions']
     if not args.show_comments:
@@ -95,8 +96,8 @@ if __name__ == "__main__":
     for user in args.redditors:
         try:
             for thing_type in break_by:
-                karma = main(user, thing_type=thing_type)
-                karma = sort_and_cut(karma, CUT_LIMIT)
+                karma = main(user, args.limit, thing_type=thing_type)
+                karma = sort_and_cut(karma, args.highest)
                 print "{0} karma for {1}".format(thing_type, user)
                 term_print(karma)
         except urllib2.HTTPError:
