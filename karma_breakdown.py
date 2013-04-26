@@ -38,10 +38,9 @@ def term_print(karma_by_subreddit):
     print "{titel[0]:{align[0]}{width}} | {titel[1]:{align[1]}{width}}" \
         .format(titel=titel, align=align, width=width)
     print "{0:^{width}}".format("-" * width, width=width * 2 + 1)
-    for (subreddit, karma) in karma_by_subreddit:
+    for subreddit, karma in karma_by_subreddit:
         print "{subreddit:{align[0]}{width}} | {karma:{align[1]} {width}}" \
-            .format(subreddit=subreddit, karma=karma,
-                    width=width, align=align)
+            .format(subreddit=subreddit, karma=karma, width=width, align=align)
     print
 
 
@@ -74,24 +73,20 @@ if __name__ == "__main__":
                         default=['_Daimon_'], help='Redditors to analyse')
     parser.add_argument('-c', '--comments', dest='show_comments',
                         action='store_false',
-                        help='Disable karma break for comments')
+                        help="Don't breakdown comments karma")
     parser.add_argument('-s', '--submissions', dest='show_submissions',
                         action='store_false',
-                        help='Disable karma break for submissions')
+                        help="Don't breakdown submissions karma")
     parser.add_argument('--limit', dest='limit', type=int, default=100,
                         help='How many entries are examined')
     parser.add_argument('--highest', dest='highest', type=int, default=5,
                         help='This number of subreddits with highest karma'
                              'gained are shown')
     args = parser.parse_args()
-    break_by = ['comments', 'submissions']
-    if not args.show_comments:
-        break_by.remove('comments')
-    if not args.show_submissions:
-        break_by.remove('submissions')
-    if not len(break_by):
-        print >> sys.stderr, ("ERROR. Both comments and submission breaking " +
-                              "disabled!")
+    break_by = ['comments'] if args.show_comments else []
+    break_by += ['submissions'] if args.show_submissions else []
+    if not break_by:
+        print "ERROR. Both comments and submission breaking disabled!"
         sys.exit(-1)
     for user in args.redditors:
         try:
