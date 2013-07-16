@@ -18,6 +18,9 @@ precise than the official feature. Strictly speaking this is a program, not a
 bot. It is included in this repo anyway as it serves as a nice introduction to
 writing bots that uses the reddit api.
 
+NOTE: This feature is now also available to non-gold user. Visit your userpage
+and there will be a blue link on the top right half on the screen.
+
 Nerd Baller
 -----------
 
