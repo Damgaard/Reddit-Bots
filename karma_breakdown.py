@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
 """
-Breaks down a redditors karma by subreddit.
+Breaks down a redditor's karma by subreddit.
 
 Usage: karma_breakdown redditor1 redditor2
 
 The input should the names of redditors. It outputs 2 tables with karma
 breakdowns of comments and submissions by subreddit.
 
-This program is part of the beginners tutorial on the python wrapper module
-of Reddits API, which can be found here
-https://github.com/praw-dev/praw/wiki/Getting-Started
+This program is part of the beginners tutorial for PRAW the python wrapper
+module of Reddits API, which can be found here
+https://praw.readthedocs.org/en/latest/pages/getting_started.html
 
 Created by Andreas Damgaard Pedersen 22 April 2012
 Reddit username: _Daimon_
