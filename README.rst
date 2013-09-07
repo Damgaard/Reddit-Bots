@@ -8,6 +8,11 @@ Created by
 
     *- Andreas Damgaard Pedersen*
 
+Undo Me
+-------
+
+Deletes all the comments and submissions made by the logged-in user.
+
 Karma Breakdown
 ---------------
 
